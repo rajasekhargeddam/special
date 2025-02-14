@@ -3,16 +3,30 @@ const question = document.querySelector('.question');
 const yesBtn = document.querySelector('.yes-btn');
 const noBtn = document.querySelector('.no-btn');
 
-let moveCount = 0;
+let moveCount = 0; // Track movements
 
 yesBtn.addEventListener('click', () => {
     question.innerHTML = 'OMG! Thank you, sunshine! 💜😊';
     noBtn.style.display = 'none'; // Hide the "No" button
 });
 
-noBtn.addEventListener('mouseenter', () => {
-    if (moveCount < 10) {
-        moveNoButton();
+// Detect hover on desktop and tap on mobile
+noBtn.addEventListener('mouseover', moveNoButton);
+noBtn.addEventListener('click', moveNoButton);
+
+function moveNoButton() {
+    if (moveCount < 10) {  // Now disappears after 10 movements
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const noBtnRect = noBtn.getBoundingClientRect();
+
+        let newX, newY;
+        do {
+            newX = Math.floor(Math.random() * (wrapperRect.width - noBtnRect.width));
+            newY = Math.floor(Math.random() * (wrapperRect.height - noBtnRect.height));
+        } while (isOverlapping(newX, newY));
+
+        noBtn.style.left = `${newX}px`;
+        noBtn.style.top = `${newY}px`;
         moveCount++;
     } else {
         noBtn.innerText = "You have no choice! 😂";
@@ -21,21 +35,6 @@ noBtn.addEventListener('mouseenter', () => {
             noBtn.style.display = 'none';
         }, 1000);
     }
-});
-
-function moveNoButton() {
-    const wrapperRect = wrapper.getBoundingClientRect();
-    const noBtnRect = noBtn.getBoundingClientRect();
-
-    let newX, newY;
-
-    do {
-        newX = Math.floor(Math.random() * (wrapperRect.width - noBtnRect.width));
-        newY = Math.floor(Math.random() * (wrapperRect.height - noBtnRect.height));
-    } while (isOverlapping(newX, newY));
-
-    noBtn.style.left = `${newX}px`;
-    noBtn.style.top = `${newY}px`;
 }
 
 function isOverlapping(x, y) {
