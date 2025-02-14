@@ -3,20 +3,50 @@ const question = document.querySelector('.question');
 const yesBtn = document.querySelector('.yes-btn');
 const noBtn = document.querySelector('.no-btn');
 
+let moveCount = 0;
+
 yesBtn.addEventListener('click', () => {
-    question.innerHTML = 'OMG, thank you sunshine! 😍💕';
-    yesBtn.style.display = 'none';
-    noBtn.style.display = 'none';
+    question.innerHTML = 'OMG! Thank you, sunshine! 💜😊';
+    noBtn.style.display = 'none'; // Hide the "No" button
 });
 
-noBtn.addEventListener('click', () => {
-    const maxX = wrapper.clientWidth - noBtn.clientWidth;
-    const maxY = wrapper.clientHeight - noBtn.clientHeight;
-
-    const randomX = Math.random() * maxX;
-    const randomY = Math.random() * maxY;
-
-    noBtn.style.position = "absolute";
-    noBtn.style.left = `${randomX}px`;
-    noBtn.style.top = `${randomY}px`;
+noBtn.addEventListener('mouseenter', () => {
+    if (moveCount < 10) {
+        moveNoButton();
+        moveCount++;
+    } else {
+        noBtn.innerText = "You have no choice! 😂";
+        setTimeout(() => {
+            question.innerHTML = 'Yay! You said YES! 💜🎉';
+            noBtn.style.display = 'none';
+        }, 1000);
+    }
 });
+
+function moveNoButton() {
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const noBtnRect = noBtn.getBoundingClientRect();
+
+    let newX, newY;
+
+    do {
+        newX = Math.floor(Math.random() * (wrapperRect.width - noBtnRect.width));
+        newY = Math.floor(Math.random() * (wrapperRect.height - noBtnRect.height));
+    } while (isOverlapping(newX, newY));
+
+    noBtn.style.left = `${newX}px`;
+    noBtn.style.top = `${newY}px`;
+}
+
+function isOverlapping(x, y) {
+    const buffer = 10;
+    const noBtnRect = noBtn.getBoundingClientRect();
+    const yesBtnRect = yesBtn.getBoundingClientRect();
+
+    return (
+        x < yesBtnRect.right + buffer &&
+        x + noBtnRect.width > yesBtnRect.left - buffer &&
+        y < yesBtnRect.bottom + buffer &&
+        y + noBtnRect.height > yesBtnRect.top - buffer
+    );
+}
