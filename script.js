@@ -1,65 +1,30 @@
-const wrapper = document.querySelector('.wrapper');
 const question = document.querySelector('.question');
 const yesBtn = document.querySelector('.yes-btn');
 const noBtn = document.querySelector('.no-btn');
+let noClickCount = 0;
 
-let moveCount = 0; // Track movements
-
-// Ensure "No" button starts in a safe position
-window.onload = () => {
-    setTimeout(positionNoButton, 100); // Give layout time to load
-};
-
+// 💜 Yes Button Click Event
 yesBtn.addEventListener('click', () => {
-    question.innerHTML = 'OMG! Thank you, sunshine! 💜😊';
-    noBtn.style.display = 'none'; // Hide "No" button
+    question.innerHTML = 'OMG, Thank You! 💜';
+    noBtn.style.display = 'none'; // Hide No button after Yes is clicked
 });
 
-// Move "No" button on hover (desktop) & click (mobile)
-noBtn.addEventListener('mouseover', moveNoButton);
-noBtn.addEventListener('click', moveNoButton);
+// 💜 No Button Movement Logic
+noBtn.addEventListener('mouseover', () => {
+    if (noClickCount >= 10) return; // Stop moving after 10 clicks
 
-function moveNoButton() {
-    if (moveCount < 10) {  
-        positionNoButton();
-        moveCount++;
-    } else {
-        noBtn.innerText = "You have no choice! 😂";
+    let x = Math.random() * (window.innerWidth - noBtn.clientWidth - 40);
+    let y = Math.random() * (window.innerHeight - noBtn.clientHeight - 40);
+
+    noBtn.style.position = 'absolute';
+    noBtn.style.left = `${x}px`;
+    noBtn.style.top = `${y}px`;
+
+    noClickCount++;
+
+    if (noClickCount >= 10) {
         setTimeout(() => {
-            question.innerHTML = 'Yay! You said YES! 💜🎉';
-            noBtn.style.display = 'none';
-        }, 1000);
+            noBtn.style.display = 'none'; // Hide No button after 10 moves
+        }, 500);
     }
-}
-
-// Position "No" button randomly while avoiding "Yes"
-function positionNoButton() {
-    const wrapperRect = wrapper.getBoundingClientRect();
-    const yesBtnRect = yesBtn.getBoundingClientRect();
-    const noBtnRect = noBtn.getBoundingClientRect();
-
-    let newX, newY;
-    let maxAttempts = 100; // Prevent infinite loop
-    let attempts = 0;
-
-    do {
-        newX = Math.random() * (wrapperRect.width - noBtnRect.width);
-        newY = Math.random() * (wrapperRect.height - noBtnRect.height);
-        attempts++;
-    } while (isOverlapping(newX, newY, yesBtnRect) && attempts < maxAttempts);
-
-    noBtn.style.left = `${newX}px`;
-    noBtn.style.top = `${newY}px`;
-}
-
-// Prevent overlap with "Yes" button
-function isOverlapping(x, y, yesBtnRect) {
-    const buffer = 30; // Minimum safe distance
-
-    return (
-        x < yesBtnRect.right + buffer &&
-        x + noBtn.clientWidth > yesBtnRect.left - buffer &&
-        y < yesBtnRect.bottom + buffer &&
-        y + noBtn.clientHeight > yesBtnRect.top - buffer
-    );
-}
+});
