@@ -9,7 +9,7 @@ yesBtn.addEventListener('click', () => {
     noBtn.style.display = 'none';
 });
 
-noBtn.addEventListener('mouseover', () => {
+noBtn.addEventListener('click', () => {
     const maxX = wrapper.clientWidth - noBtn.clientWidth;
     const maxY = wrapper.clientHeight - noBtn.clientHeight;
 
