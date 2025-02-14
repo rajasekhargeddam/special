@@ -5,22 +5,22 @@ const noBtn = document.querySelector('.no-btn');
 
 let moveCount = 0; // Track movements
 
-// Adjust initial position of "No" button
+// Ensure "No" button starts in a safe position
 window.onload = () => {
-    positionNoButton();
+    setTimeout(positionNoButton, 100); // Give layout time to load
 };
 
 yesBtn.addEventListener('click', () => {
     question.innerHTML = 'OMG! Thank you, sunshine! 💜😊';
-    noBtn.style.display = 'none'; // Hide the "No" button
+    noBtn.style.display = 'none'; // Hide "No" button
 });
 
-// Detect hover on desktop and tap on mobile
+// Move "No" button on hover (desktop) & click (mobile)
 noBtn.addEventListener('mouseover', moveNoButton);
 noBtn.addEventListener('click', moveNoButton);
 
 function moveNoButton() {
-    if (moveCount < 10) {  // Now disappears after 10 movements
+    if (moveCount < 10) {  
         positionNoButton();
         moveCount++;
     } else {
@@ -32,25 +32,29 @@ function moveNoButton() {
     }
 }
 
-// Set random position for "No" button (avoiding overlap)
+// Position "No" button randomly while avoiding "Yes"
 function positionNoButton() {
     const wrapperRect = wrapper.getBoundingClientRect();
     const yesBtnRect = yesBtn.getBoundingClientRect();
     const noBtnRect = noBtn.getBoundingClientRect();
 
     let newX, newY;
+    let maxAttempts = 100; // Prevent infinite loop
+    let attempts = 0;
+
     do {
-        newX = Math.floor(Math.random() * (wrapperRect.width - noBtnRect.width));
-        newY = Math.floor(Math.random() * (wrapperRect.height - noBtnRect.height));
-    } while (isOverlapping(newX, newY, yesBtnRect));
+        newX = Math.random() * (wrapperRect.width - noBtnRect.width);
+        newY = Math.random() * (wrapperRect.height - noBtnRect.height);
+        attempts++;
+    } while (isOverlapping(newX, newY, yesBtnRect) && attempts < maxAttempts);
 
     noBtn.style.left = `${newX}px`;
     noBtn.style.top = `${newY}px`;
 }
 
-// Prevents overlapping with Yes button
+// Prevent overlap with "Yes" button
 function isOverlapping(x, y, yesBtnRect) {
-    const buffer = 20; // Minimum distance between Yes & No
+    const buffer = 30; // Minimum safe distance
 
     return (
         x < yesBtnRect.right + buffer &&
