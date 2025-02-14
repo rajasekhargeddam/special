@@ -5,6 +5,11 @@ const noBtn = document.querySelector('.no-btn');
 
 let moveCount = 0; // Track movements
 
+// Adjust initial position of "No" button
+window.onload = () => {
+    positionNoButton();
+};
+
 yesBtn.addEventListener('click', () => {
     question.innerHTML = 'OMG! Thank you, sunshine! 💜😊';
     noBtn.style.display = 'none'; // Hide the "No" button
@@ -16,17 +21,7 @@ noBtn.addEventListener('click', moveNoButton);
 
 function moveNoButton() {
     if (moveCount < 10) {  // Now disappears after 10 movements
-        const wrapperRect = wrapper.getBoundingClientRect();
-        const noBtnRect = noBtn.getBoundingClientRect();
-
-        let newX, newY;
-        do {
-            newX = Math.floor(Math.random() * (wrapperRect.width - noBtnRect.width));
-            newY = Math.floor(Math.random() * (wrapperRect.height - noBtnRect.height));
-        } while (isOverlapping(newX, newY));
-
-        noBtn.style.left = `${newX}px`;
-        noBtn.style.top = `${newY}px`;
+        positionNoButton();
         moveCount++;
     } else {
         noBtn.innerText = "You have no choice! 😂";
@@ -37,15 +32,30 @@ function moveNoButton() {
     }
 }
 
-function isOverlapping(x, y) {
-    const buffer = 10;
-    const noBtnRect = noBtn.getBoundingClientRect();
+// Set random position for "No" button (avoiding overlap)
+function positionNoButton() {
+    const wrapperRect = wrapper.getBoundingClientRect();
     const yesBtnRect = yesBtn.getBoundingClientRect();
+    const noBtnRect = noBtn.getBoundingClientRect();
+
+    let newX, newY;
+    do {
+        newX = Math.floor(Math.random() * (wrapperRect.width - noBtnRect.width));
+        newY = Math.floor(Math.random() * (wrapperRect.height - noBtnRect.height));
+    } while (isOverlapping(newX, newY, yesBtnRect));
+
+    noBtn.style.left = `${newX}px`;
+    noBtn.style.top = `${newY}px`;
+}
+
+// Prevents overlapping with Yes button
+function isOverlapping(x, y, yesBtnRect) {
+    const buffer = 20; // Minimum distance between Yes & No
 
     return (
         x < yesBtnRect.right + buffer &&
-        x + noBtnRect.width > yesBtnRect.left - buffer &&
+        x + noBtn.clientWidth > yesBtnRect.left - buffer &&
         y < yesBtnRect.bottom + buffer &&
-        y + noBtnRect.height > yesBtnRect.top - buffer
+        y + noBtn.clientHeight > yesBtnRect.top - buffer
     );
 }
