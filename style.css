@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap');
 
 * {
     margin: 0;
@@ -6,91 +6,83 @@
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #7d2ae8, #b07df5);
-    text-align: center;
+    background: linear-gradient(135deg, #a855f7, #7d2ae8);
     padding: 20px;
 }
+
 .wrapper {
     position: relative;
     width: 90%;
-    max-width: 500px;
+    max-width: 400px;
     background: #fff;
     border-radius: 20px;
-    padding: 30px 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    animation: fadeIn 1s ease-in-out;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
+
 i {
-    font-size: 6em;
+    font-size: 5em;
     color: #7d2ae8;
-    margin-bottom: 10px;
 }
+
 h2 {
-    font-size: 2em;
-    color: #333;
-    font-weight: 700;
+    font-size: 1.8em;
+    color: #7d2ae8;
+    margin: 15px 0;
 }
+
 .btn-group {
+    width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     margin-top: 20px;
-    gap: 20px;
-    flex-wrap: wrap;
+    position: relative;
 }
+
 button {
-    width: 130px;
-    height: 45px;
-    font-size: 1.2em;
+    width: 120px;
+    height: 40px;
+    font-size: 1em;
     font-weight: 600;
-    border-radius: 25px;
-    border: none;
+    border-radius: 30px;
+    border: 2px solid #7d2ae8;
     cursor: pointer;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease, background 0.3s ease;
+    transition: 0.3s ease;
+    position: relative;
 }
+
 .yes-btn {
     background: #7d2ae8;
-    color: #fff;
+    color: white;
 }
-.yes-btn:hover {
-    background: #6a21d8;
-    transform: scale(1.1);
-}
+
 .no-btn {
-    background: #fff;
     color: #7d2ae8;
-    border: 2px solid #7d2ae8;
-    position: absolute;
-    right: 20px;  /* Prevents overlap on page load */
+    background: white;
 }
 
 .no-btn:hover {
     background: #7d2ae8;
-    color: #fff;
-    transform: scale(1.1);
+    color: white;
 }
 
-/* Responsive Styles */
-@media (max-width: 480px) {
-    h2 {
-        font-size: 1.6em;
-    }
+/* Mobile Fix: Prevent Overlapping */
+@media (max-width: 500px) {
     .btn-group {
         flex-direction: column;
-        gap: 10px;
+        align-items: center;
     }
-    button {
-        width: 100%;
-    }
-}
 
-/* Smooth Fade-in Effect */
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
+    .yes-btn, .no-btn {
+        width: 80%;
+        margin: 5px 0;
+        position: static;
+    }
 }
